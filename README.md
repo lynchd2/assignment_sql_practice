@@ -1,9 +1,16 @@
+AUTHORS: DYLAN, ADRIAN
+====== 
+
+SQLZoo
+------
+
+
+
 ### Select Basics 
 
 * Modify it to show the population of Germany
 
 ```sql
-
   SELECT population 
   FROM world
   WHERE name = 'Germany'
