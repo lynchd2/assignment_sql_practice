@@ -592,5 +592,108 @@ WHERE ord = 1
 + Obtain a list, in alphabetical order, of actors who've had at least 30 starring roles.
 
 ```sql
+  SELECT name
+  FROM actor JOIN casting ON (actor.id = casting.actorid)
+  WHERE ord = 1
+  GROUP by name asc
+  HAVING COUNT(name) >= 30
+
+```
+
++List the films released in the year 1978 ordered by the number of actors in the cast.
+
+```sql
+  SELECT title, COUNT(*) as actors
+  FROM movie JOIN casting ON (movie.id = casting.movieid)
+  WHERE yr = 1978
+  GROUP BY title
+  ORDER BY COUNT(*) desc
+```
+
+
++List all the people who have worked with 'Art Garfunkel'.
+
+```sql
+SELECT DISTINCT name
+FROM( SELECT movieid FROM casting
+WHERE actorid IN (
+  SELECT id FROM actor
+  WHERE name='Art Garfunkel'))as a
+JOIN casting ON (a.movieid = casting.movieid)
+JOIN actor ON (casting.actorid = actor.id)
+WHERE name != 'Art Garfunkel'
+
+
+### SELECT Count
+
++ Show the total population of the world.
+
+```sql
+
+SELECT SUM(population)
+FROM world
+```
+
++ List all the continents - just once each.
+
+
+```sql
+  SELECT DISTINCT continent
+  FROM world
+
+```
+
++ Give the total GDP of Africa
+
+```sql
+SELECT SUM(gdp)
+FROM world
+WHERE continent = 'Africa'
+```
+
++ How many countries have an area of at least 1000000
+
+
+```sql
+  SELECT COUNT(name)
+  FROM world
+  WHERE area >= 1000000
+```
+
++What is the total population of ('France','Germany','Spain')
+
+
+```sql
+  SELECT SUM(population)
+  FROM world
+  WHERE name IN ('France', 'Germany', 'Spain')
+```
+
++ For each continent show the continent and number of countries.
+
+```sql
+
+SELECT continent, COUNT(name)
+FROM world
+GROUP BY continent
+
+```
+
++For each continent show the continent and number of countries with populations of at least 10 million.
+
+```sql
+SELECT continent, COUNT(name)
+FROM world
+WHERE population > 10000000
+GROUP BY continent
+```
+
++List the continents that have a total population of at least 100 million.
+
+```sql
+SELECT continent
+FROM world
+GROUP BY continent
+HAVING SUM(population) > 100000000
 
 ```
