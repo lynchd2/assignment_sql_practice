@@ -577,5 +577,20 @@ Use movieid=11768, this is the value that you obtained in the previous question.
 + List the film title and the leading actor for all of the films 'Julie Andrews' played in.
 
 ```sql
+SELECT DISTINCT title, name
+FROM (((SELECT movieid FROM casting
+WHERE actorid IN (
+  SELECT id FROM actor
+  WHERE name='Julie Andrews')) AS a
+JOIN casting ON a.movieid = casting.movieid)
+JOIN actor ON actorid = actor.id)
+JOIN movie ON casting.movieid = movie.id
+WHERE ord = 1
   
+```
+
++ Obtain a list, in alphabetical order, of actors who've had at least 30 starring roles.
+
+```sql
+
 ```
