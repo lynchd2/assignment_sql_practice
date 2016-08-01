@@ -451,7 +451,9 @@ SELECT teamname, COUNT(teamname) as goals
   GROUP BY matchid, mdate
 
 ```
++ 13 is really hard
 
+```sql
 SELECT mdate,
   team1,
   SUM(CASE WHEN teamid=team1 THEN 1 ELSE 0 END) score1,
@@ -459,3 +461,121 @@ SELECT mdate,
   SUM(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) score2
   FROM game LEFT OUTER JOIN goal ON matchid = id
   GROUP BY mdate, matchid, team2, team1
+```
+
+### More Join Operations
+
++ List the films where the yr is 1962 [Show id, title]
+
+```sql
+ SELECT id, title
+ FROM movie
+ WHERE yr=1962
+```
+
++ Give year of 'Citizen Kane'.
+
+``` sql
+  SELECT yr 
+  FROM movie
+  WHERE title = 'Citizen Kane'
+```
+
++ List all of the Star Trek movies, include the id, title and yr (all of these movies include the words Star Trek in the title). Order results by year.
+
+```sql
+  SELECT id, title, yr
+  FROM movie
+  WHERE title LIKE '%Star Trek%'
+  ORDER BY yr asc
+```
+
++ What are the titles of the films with id 11768, 11955, 21191
+
+```sql
+  SELECT title
+  FROM movie
+  WHERE id IN (11768,11955,21191)
+```
+
++ What id number does the actress 'Glenn Close' have?
+
+```sql
+  SELECT id
+  FROM actor
+  WHERE name = 'Glenn Close'
+```
+
++ What is the id of the film 'Casablanca'
+
+```sql
+  SELECT id
+  FROM movie
+  WHERE title = 'Casablanca'
+```
+
++ Obtain the cast list for 'Casablanca'.
+
+what is a cast list?
+Use movieid=11768, this is the value that you obtained in the previous question.
+
+```sql
+  SELECT name
+  FROM (movie JOIN casting ON movie.id = casting.movieid) JOIN actor ON actorid = actor.id
+  WHERE movie.id = 11768
+```
+
++ Obtain the cast list for the film 'Alien'
+
+```sql
+  SELECT name
+  FROM (movie JOIN casting ON movie.id = casting.movieid) JOIN actor ON actorid = actor.id
+  WHERE movie.title = 'Alien'
+```
+
++ List the films in which 'Harrison Ford' has appeared
+
+```sql
+  SELECT title
+  FROM (movie JOIN casting ON movie.id = casting.movieid) JOIN actor ON actorid = actor.id
+  WHERE actor.name = 'Harrison Ford'
+```
+
++ List the films where 'Harrison Ford' has appeared - but not in the starring role. 
+
+```sql
+  SELECT title
+  FROM (movie JOIN casting ON movie.id = casting.movieid) JOIN actor ON actorid = actor.id
+  WHERE actor.name = 'Harrison Ford' AND ord != 1
+```
+
++ List the films together with the leading star for all 1962 films.
+
+```sql
+  SELECT title, name
+  FROM (movie JOIN casting ON movie.id = casting.movieid) JOIN actor ON actorid = actor.id
+  WHERE yr = 1962 AND ord = 1
+```
+
++ Which were the busiest years for 'John Travolta', show the year and the number of movies he made each year for any year in which he made more than 2 movies.
+
+```sql
+  SELECT yr,COUNT(title) FROM
+  movie JOIN casting ON movie.id=movieid
+         JOIN actor   ON actorid=actor.id
+  WHERE name='John Travolta'
+  GROUP BY yr
+  HAVING COUNT(title)=(SELECT MAX(c) FROM
+(SELECT yr,COUNT(title) AS c FROM
+   movie JOIN casting ON movie.id=movieid
+         JOIN actor   ON actorid=actor.id
+  WHERE name='John Travolta'
+ GROUP BY yr) AS t
+)
+```
+
++ List the film title and the leading actor for all of the films 'Julie Andrews' played in.
+
+```sql
+  
+```
