@@ -146,3 +146,86 @@ Show per-capita GDP for the trillion dollar countries to the nearest $1000.
 SELECT name, ROUND(gdp/population, -3) FROM world
 WHERE gdp >= 1000000000000`
 ```
+
+```sql
+SELECT name, ROUND(gdp/population, -3) FROM world
+WHERE gdp >= 1000000000000`
+```
+
++ The CASE statement shown is used to substitute North America for Caribbean in the third column.
+
+```sql
+
+Show the name - but substitute Australasia for Oceania - for countries beginning with N.
+    SELECT name,
+    CASE WHEN continent = 'Oceania' THEN 'Australasia'
+            ELSE continent END
+    FROM world
+    WHERE name LIKE 'N%'
+
+```
+
+Put the continents right...
+
+Oceania becomes Australasia
+Countries in Eurasia and Turkey go to Europe/Asia
+Caribbean islands starting with 'B' go to North America, other Caribbean islands go to South America
+Order by country name in ascending order
+Show the name, the original continent and the new continent of all countries.
+
+```sql
+
+  SELECT name, 
+       CASE WHEN continent = 'Europe' THEN 'Eurasia'
+            WHEN continent = 'Asia' THEN 'Eurasia'
+            WHEN continent = 'North America' THEN 'America'
+            WHEN continent = 'South America' THEN 'America'
+            WHEN continent = 'Caribbean' THEN 'America'
+            ELSE continent END
+            FROM world
+  WHERE name LIKE 'A%' OR name LIKE 'B%'
+
+```
++ Change the query shown so that it displays Nobel prizes for 1950.
+
+
+```sql
+
+  SELECT yr, subject, winner
+  FROM nobel
+  WHERE yr = 1950
+
+```
+
++ Show who won the 1962 prize for Literature.
+
+```sql
+
+  SELECT winner
+  FROM nobel
+  WHERE yr = 1962
+    AND subject = 'Literature'
+
+```
+
++ Show the year and subject that won 'Albert Einstein' his prize.
+
+```sql
+  SELECT yr, subject
+  FROM nobel
+  WHERE winner = 'Albert Einstein'
+
+```
++ Give the name of the 'Peace' winners since the year 2000, including 2000.
+
+
+
+```sql
+  SELECT winner
+  FROM nobel
+  WHERE yr > 1999 AND subject = 'Peace'
+
+````
+
++ Show all details (yr, subject, winner) of the Literature prize winners for 1980 to 1989 inclusive.
+
